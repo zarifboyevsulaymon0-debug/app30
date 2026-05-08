@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI QR Generator</title>
+    <!-- QR kod yaratish uchun kutubxona -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root { --primary: #6366f1; --bg: #f8fafc; --dark: #1e293b; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); width: 100%; max-width: 380px; text-align: center; }
+        h2 { color: var(--dark); margin-bottom: 10px; }
+        p { color: #64748b; font-size: 0.9rem; margin-bottom: 25px; }
+        input { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; outline: none; transition: 0.3s; font-size: 16px; box-sizing: border-box; }
+        input:focus { border-color: var(--primary); }
+        #qrcode { margin: 25px auto; display: flex; justify-content: center; padding: 15px; background: #f1f5f9; border-radius: 15px; width: fit-content; }
+        button { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 16px; }
+        button:hover { background: #4f46e5; transform: translateY(-2px); }
+        .download-link { display: none; margin-top: 15px; color: var(--primary); text-decoration: none; font-size: 14px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>QR Generator</h2>
+    <p>Link yoki matnni QR kodga aylantiring</p>
+    
+    <input type="text" id="textInput" placeholder="https://google.com" oninput="generateQR()">
+    
+    <div id="qrcode"></div>
+    
+    <button onclick="downloadQR()">Rasmni yuklab olish</button>
+    <a id="downloadLink" class="download-link">Yuklashni tasdiqlash</a>
+</div>
+
+<script>
+    let qrcode = new QRCode(document.getElementById("qrcode"), {
+        width: 180,
+        height: 180
+    });
+
+    function generateQR() {
+        let input = document.getElementById("textInput").value;
+        if (input.trim() === "") {
+            qrcode.clear();
+            return;
+        }
+        qrcode.makeCode(input);
+    }
+
+    function downloadQR() {
+        let img = document.querySelector("#qrcode img");
+        if (img) {
+            let link = document.createElement("a");
+            link.href = img.src;
+            link.download = "qrcode.png";
+            link.click();
+        } else {
+            alert("Avval matn kiriting!");
+        }
+    }
+
+    // Default holatda bitta QR yaratib qo'yamiz
+    qrcode.makeCode("Zarifboyev Sulaymon");
+</script>
+
+</body>
+</html>
